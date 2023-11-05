@@ -8,9 +8,9 @@
 
 #include <dolphin/dolphin.h>
 
-#include "flipper_structs.h"
-#include "game_structs.h"
-#include "gui/scenes.h"
+#include "game/flipper_structs.h"
+#include "game/game_structs.h"
+#include "game/threads.h"
 #include "gui/view_dispatcher.h"
 #include "threads.h"
 

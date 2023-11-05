@@ -3,8 +3,9 @@
 #include "threads.h"
 #include "constants.h"
 #include "game_structs.h"
+#include "../gui/gui.h"
 #include "state_management.h"
-#include "gui/utils.h"
+#include "../gui/utils.h"
 
 void main_thread(struct ApplicationContext *context) {
     furi_thread_start(context->secondary_thread);

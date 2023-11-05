@@ -4,11 +4,46 @@ App(
     apptype=FlipperAppType.EXTERNAL,
     entry_point="matagotchi_app",
     requires=["gui"],
+		sources=["src/entry_point.c", "src/**/*.c*"],
+		sdk_headers=["src/game/*.h*"],
     stack_size=1 * 1024,
     fap_icon="matagotchi_10px.png",
     fap_icon_assets="assets",
     fap_category="Games",
     fap_description="Tamagotchi like game",
+    fap_author="MrModd",
+    fap_weburl="https://github.com/MrModd/Matagotchi"
+)
+
+App(
+    appid="matagotchi_test",
+    name="Matagotchi test",
+    apptype=FlipperAppType.EXTERNAL,
+    entry_point="test_matagotchi_app",
+    requires=["matagotchi"],
+		sources=["test/entry_point.cpp", "src/game/*.c*", "test/game/*.c*"],
+    stack_size=1 * 1024,
+		fap_private_libs=[
+			Lib(
+				name="googletest",
+				fap_include_paths=["googletest/include", "googletest"],
+				sources=[
+					"googletest/src/gtest-all.cc",
+					"googletest/src/gtest-assertion-result.cc",
+					"googletest/src/gtest-death-test.cc",
+					"googletest/src/gtest-filepath.cc",
+					"googletest/src/gtest-internal-inl.h",
+					"googletest/src/gtest-matchers.cc",
+					"googletest/src/gtest-port.cc",
+					"googletest/src/gtest-printers.cc",
+					"googletest/src/gtest-test-part.cc",
+					"googletest/src/gtest-typed-test.cc",
+					"googletest/src/gtest.cc",
+				],
+				cflags=["-Wno-error"],
+			),
+		],
+    fap_description="Unit tests for Matagotchi",
     fap_author="MrModd",
     fap_weburl="https://github.com/MrModd/Matagotchi"
 )
