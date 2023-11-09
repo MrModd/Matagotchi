@@ -6,6 +6,19 @@ Tamagotchi like game for Flipper Zero
 # Disclamer
 This application is still under initial development
 
+# Running unit tests
+```sh
+make test
+build/test
+```
+
+## Optional: clangd LSP
+Create a `compile_commands.json` file with [bear](https://github.com/rizsotto/Bear):
+
+```sh
+bear make test
+```
+
 # TODO
 
 * Add ability to delete the state in settings

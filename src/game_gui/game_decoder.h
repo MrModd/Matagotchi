@@ -3,7 +3,7 @@
 
 #include <gui/icon.h>
 
-#include "../game_structs.h"
+#include "game/game_structs.h"
 
 const Icon *decode_image(const struct GameState *);
 

@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#include "flipper_structs.h"
+#include "game_gui/flipper_structs.h"
 
 /* Main thread used to monitor the GUI.
  * It blocks while the GUI is active. */

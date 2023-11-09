@@ -3,8 +3,8 @@
 #include <gui/view_dispatcher.h>
 
 #include "scenes.h"
-#include "utils.h"
-#include "../constants.h"
+#include "game_gui/utils.h"
+#include "game/constants.h"
 
 void start_gui_and_block(struct ApplicationContext *context) {
     // Select the first scene to launch

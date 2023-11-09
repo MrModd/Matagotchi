@@ -1,7 +1,7 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
-#include "../flipper_structs.h"
+#include "game_gui/flipper_structs.h"
 
 /* Select the first scene to show and then block until
  * the GUI stays alive. */

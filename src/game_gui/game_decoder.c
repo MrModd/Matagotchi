@@ -1,6 +1,6 @@
 #include <furi.h>
 
-#include "game_decoder.h"
+#include "game_gui/game_decoder.h"
 #include "matagotchi_icons.h"
 
 const Icon *decode_image(const struct GameState *game_state) {

@@ -2,6 +2,7 @@
 
 #include "feature_management.h"
 #include "constants.h"
+#include "game/game_structs.h"
 #include "random_generator.h"
 
 void init_xp(struct GameState *game_state, uint32_t current_timestamp) {
@@ -50,7 +51,7 @@ bool apply_xp(struct GameState *game_state, struct GameEvents game_events) {
 
             game_events.xp -= max_xp_this_stage - game_state->persistent.xp;
             game_state->persistent.xp = 0;
-            game_state->persistent.stage++;
+            game_state->persistent.stage = (LifeStage)((int)(game_state->persistent.stage)+1);
             FURI_LOG_I(LOG_TAG, "Evoluted to new stage %u!", game_state->persistent.stage);
         } else {
             game_state->persistent.xp += game_events.xp;

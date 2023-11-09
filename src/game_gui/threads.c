@@ -1,6 +1,6 @@
 #include <furi.h>
 
-#include "threads.h"
+#include "game_gui/threads.h"
 #include "constants.h"
 #include "game_structs.h"
 #include "../gui/gui.h"
