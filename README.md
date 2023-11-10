@@ -6,6 +6,13 @@ Tamagotchi like game for Flipper Zero
 # Disclamer
 This application is still under initial development
 
+# Build
+Build with [ufbt](https://github.com/flipperdevices/flipperzero-ufbt/tree/dev) passing the `src` folder to the UFBT_APP_DIR like so:
+
+```sh
+ufbt UFBT_APP_DIR=$(pwd)/src
+```
+
 # Running unit tests
 ```sh
 make test

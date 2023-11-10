@@ -1,9 +1,9 @@
 #include <furi.h> // For FURI_LOG_D
 
-#include "feature_management.h"
-#include "constants.h"
+#include "game/feature_management.h"
+#include "game/constants.h"
 #include "game/game_structs.h"
-#include "random_generator.h"
+#include "game/random_generator.h"
 
 void init_xp(struct GameState *game_state, uint32_t current_timestamp) {
     game_state->persistent.xp = 0;
@@ -51,7 +51,7 @@ bool apply_xp(struct GameState *game_state, struct GameEvents game_events) {
 
             game_events.xp -= max_xp_this_stage - game_state->persistent.xp;
             game_state->persistent.xp = 0;
-            game_state->persistent.stage = (LifeStage)((int)(game_state->persistent.stage)+1);
+            game_state->persistent.stage = (enum LifeStage)((int)(game_state->persistent.stage)+1);
             FURI_LOG_I(LOG_TAG, "Evoluted to new stage %u!", game_state->persistent.stage);
         } else {
             game_state->persistent.xp += game_events.xp;
