@@ -5,8 +5,8 @@
 #include "main_scene.h"
 #include "scenes.h"
 #include "game_decoder.h"
-#include "../flipper_structs.h"
-#include "../constants.h"
+#include "game_gui/flipper_structs.h"
+#include "game/constants.h"
 
 static void scene_main_refresh_view(ButtonPanel *button_panel, struct GameState *game_state) {
     button_panel_reset(button_panel);

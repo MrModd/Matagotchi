@@ -1,8 +1,8 @@
 #include <furi.h>
 
 #include "settings_scene.h"
-#include "../flipper_structs.h"
-#include "../constants.h"
+#include "game_gui/flipper_structs.h"
+#include "game/constants.h"
 
 void scene_settings_on_enter(void *ctx) {
     UNUSED(ctx);

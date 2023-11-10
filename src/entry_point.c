@@ -8,11 +8,13 @@
 
 #include <dolphin/dolphin.h>
 
-#include "flipper_structs.h"
-#include "game_structs.h"
-#include "gui/scenes.h"
+#include "game_gui/flipper_structs.h"
+#include "game/game_structs.h"
+#include "game_gui/threads.h"
 #include "gui/view_dispatcher.h"
-#include "threads.h"
+#include "game_gui/threads.h"
+#include "game_gui/scenes.h"
+#include "game_gui/view_dispatcher.h"
 
 /******************** Initialisation & startup *****************************/
 

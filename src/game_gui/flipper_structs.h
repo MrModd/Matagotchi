@@ -10,7 +10,7 @@
 #include <core/thread.h>
 #include <core/message_queue.h>
 
-#include "game_structs.h"
+#include "game/game_structs.h"
 
 /* Application context structure */
 struct ApplicationContext {
