@@ -4,9 +4,15 @@
 #include "state_management.h"
 #include "constants.h"
 #include "feature_management.h"
+#include "features/experience.h"
+#include "features/hunger.h"
+#include "features/health.h"
 #include "settings_management.h"
 #include "save_restore.h"
 #include "game_structs.h"
+
+#define NUM_FEAT 3
+static struct Feat features[NUM_FEAT];
 
 static uint32_t get_current_timestamp() {
     DateTime current_time;
@@ -30,13 +36,16 @@ static void init_persistent_state_object(struct GameState *game_state) {
     game_state->persistent.stage = EGG;
 
     // Init every individual feature
-    init_xp(game_state, current_timestamp);
-    init_hu(game_state, current_timestamp);
-    init_hp(game_state, current_timestamp);
+    for(uint32_t i = 0; i < NUM_FEAT; ++i) {
+        features[i].init(game_state, current_timestamp);
+    }
 }
 
 void init_state(struct ApplicationContext *context) {
     struct GameState *game_state = context->game_state;
+    features[0] = init_feat_experience();
+    features[1] = init_feat_hunger();
+    features[2] = init_feat_health();
 
     // Try to load the state from the storage
     if (!load_state_from_file(&game_state->persistent)) {
@@ -68,9 +77,9 @@ static void _generate_new_random_event(uint32_t timestamp, struct ApplicationCon
         return;
     }
     // Check every individual feature
-    check_xp(context, timestamp, game_events);
-    check_hu(context, timestamp, game_events);
-    check_hp(context, timestamp, game_events);
+    for(uint32_t i = 0; i < NUM_FEAT; ++i) {
+        features[i].check(context, timestamp, game_events);
+    }
 }
 
 void generate_new_random_events(struct ApplicationContext *context, struct GameEvents *game_events) {
@@ -83,9 +92,9 @@ bool process_events(struct ApplicationContext *context, struct GameEvents game_e
     bool new_events = false;
 
     // Process every individual feature
-    new_events |= apply_xp(context, game_events);
-    new_events |= apply_hu(context, game_events);
-    new_events |= apply_hp(context, game_events);
+    for(uint32_t i = 0; i < NUM_FEAT; ++i) {
+        new_events |= features[i].apply(context, game_events);
+    }
 
     if (new_events) {
         correct_state(context->game_state);
@@ -101,21 +110,11 @@ void get_state_str(const struct GameState *game_state, char *str, size_t size) {
                       LIFE_STAGE_STRING[game_state->persistent.stage]);
 
     // Append every individual feature
-    str += copied;
-    size -= copied;
-    copied = get_text_xp(game_state, str, size);
-    str += copied;
-    size -= copied;
-    copied = snprintf(str, size, "\n");
-    str += copied;
-    size -= copied;
-    copied = get_text_hu(game_state, str, size);
-    str += copied;
-    size -= copied;
-    copied = snprintf(str, size, "\n");
-    str += copied;
-    size -= copied;
-    copied = get_text_hp(game_state, str, size);
+    for(uint32_t i = 0; i < NUM_FEAT; ++i) {
+        str += copied;
+        size -= copied;
+        copied = features[i].get_text(game_state, str, size);
+    }
 }
 
 void give_candy(struct GameState *game_state, struct GameEvents *game_events) {
