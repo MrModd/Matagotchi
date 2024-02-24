@@ -1,6 +1,7 @@
 #ifndef __SETTINGS_MANAGEMENT_H__
 #define __SETTINGS_MANAGEMENT_H__
 
+#include "flipper_structs.h"
 #include "game_structs.h"
 
 void init_settings(struct GameState *);
@@ -22,8 +23,9 @@ void persist_settings(struct GameState *);
     game_state->settings.sound = sound;
 
 // Vibration
-void vibrate_short(const struct GameState *);
-void vibrate_long(const struct GameState *);
+void vibrate_ms(const struct GameState *, uint32_t);
+void vibrate_short(const struct ApplicationContext *);
+void vibrate_long(const struct ApplicationContext *);
 
 // Sound
 

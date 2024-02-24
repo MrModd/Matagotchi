@@ -18,6 +18,18 @@ struct ThreadsMessage {
     // to pass an argument for a specific message type
 };
 
+enum VibrationMessageType {
+    VIBRATE_EXIT, // Request to exit the program
+    VIBRATE_MS // Vibrate for a given time in ms
+};
+
+struct VibrationMessage {
+    enum VibrationMessageType type;
+    union {
+        uint32_t ms; // Used when type = VIBRATION_MS
+    };
+};
+
 enum LifeStage {
     EGG,
     BABY,

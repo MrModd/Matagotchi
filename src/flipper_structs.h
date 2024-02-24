@@ -31,9 +31,13 @@ struct ApplicationContext {
     TextBox *text_box_module;
     Popup *popup_module;
 
-    /* Others */
+    /* Threads */
     FuriThread *secondary_thread;
     FuriMessageQueue *threads_message_queue; // Message queue between main thread, GUI and secondary thread
+    FuriThread *vibration_thread;
+    FuriMessageQueue *vibration_message_queue; // Message queue to request to vibrate
+
+    /* Context */
     struct GameState *game_state; // Read by draw_callback thread, written by the secondary thread
 };
 

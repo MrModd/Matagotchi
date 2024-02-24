@@ -114,12 +114,19 @@ static struct ApplicationContext * context_alloc() {
 
     // Allocate memory for queues
     context->threads_message_queue = furi_message_queue_alloc(8, sizeof(struct ThreadsMessage));
+    context->vibration_message_queue = furi_message_queue_alloc(8, sizeof(struct VibrationMessage));
 
     // Create a secondary thread
     context->secondary_thread = furi_thread_alloc();
     furi_thread_set_stack_size(context->secondary_thread, 1024U);
     furi_thread_set_context(context->secondary_thread, context);
     furi_thread_set_callback(context->secondary_thread, secondary_thread);
+
+    // Create the vibration thread
+    context->vibration_thread = furi_thread_alloc();
+    furi_thread_set_stack_size(context->vibration_thread, 1024U);
+    furi_thread_set_context(context->vibration_thread, context);
+    furi_thread_set_callback(context->vibration_thread, vibration_thread);
 
     // Allocate memory for the game state
     context->game_state = malloc(sizeof(struct GameState));
@@ -133,10 +140,12 @@ static void context_free(struct ApplicationContext *context) {
     // Free the game state
     free(context->game_state);
 
-    // Free the secondary thread
+    // Free the threads
+    furi_thread_free(context->vibration_thread);
     furi_thread_free(context->secondary_thread);
 
     // Free the queues
+    furi_message_queue_free(context->vibration_message_queue);
     furi_message_queue_free(context->threads_message_queue);
 
     free_gui(context);

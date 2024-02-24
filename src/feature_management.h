@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+#include "flipper_structs.h"
 #include "game_structs.h"
 
 /* Every feature has to implement 4 methods:
@@ -12,12 +13,12 @@
  *   The feature may needs the last update of the params, it can use @current_timestamp
  *   as init value.
  *
- * void check_<FEATURE>(const struct GameState *game_state, uint32_t current_timestamp, struct GameEvents *game_events)
+ * void check_<FEATURE>(const struct ApplicationContext *context, uint32_t current_timestamp, struct GameEvents *game_events)
  *   Verifies if at @current_timestamp there are updates to do to the params of the feature.
  *   It should use the @game_state only as reference. It should update @game_events instead
  *   to notify eventual updates to apply.
  *
- * bool apply_<FEATURE>(struct GameState *game_state, struct GameEvents game_events)
+ * bool apply_<FEATURE>(struct ApplicationContext *context, struct GameEvents game_events)
  *   Applies the updates calculated by the previous function and passed here by @game_events
  *   to the @game_state.
  *   @return: true if changes have been made to @game_state, false otherwise
@@ -29,20 +30,20 @@
 
 // Experience
 void init_xp(struct GameState *, uint32_t);
-void check_xp(const struct GameState *, uint32_t, struct GameEvents *);
-bool apply_xp(struct GameState *, struct GameEvents);
+void check_xp(const struct ApplicationContext *, uint32_t, struct GameEvents *);
+bool apply_xp(struct ApplicationContext *, struct GameEvents);
 int get_text_xp(const struct GameState *, char *, size_t);
 
 // Hunger
 void init_hu(struct GameState *, uint32_t);
-void check_hu(const struct GameState *, uint32_t, struct GameEvents *);
-bool apply_hu(struct GameState *, struct GameEvents);
+void check_hu(const struct ApplicationContext *, uint32_t, struct GameEvents *);
+bool apply_hu(struct ApplicationContext *, struct GameEvents);
 int get_text_hu(const struct GameState *, char *, size_t);
 
 // Health (depends on HU)
 void init_hp(struct GameState *, uint32_t);
-void check_hp(const struct GameState *, uint32_t, struct GameEvents *);
-bool apply_hp(struct GameState *, struct GameEvents);
+void check_hp(const struct ApplicationContext *, uint32_t, struct GameEvents *);
+bool apply_hp(struct ApplicationContext *, struct GameEvents);
 int get_text_hp(const struct GameState *, char *, size_t);
 
 /* correct_state

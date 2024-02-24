@@ -14,11 +14,13 @@ static uint32_t get_current_timestamp() {
     return datetime_datetime_to_timestamp(&current_time);
 }
 
-static void fast_forward_state(struct GameState *game_state) {
+static void fast_forward_state(struct ApplicationContext *context) {
+    struct GameState *game_state = context->game_state;
+
     MASK_VIBRO_SOUND(game_state)
     struct GameEvents events = { 0 };
-    generate_new_random_events(game_state, &events);
-    process_events(game_state, events);
+    generate_new_random_events(context, &events);
+    process_events(context, events);
     UNMASK_VIBRO_SOUND(game_state)
 }
 
@@ -33,7 +35,9 @@ static void init_persistent_state_object(struct GameState *game_state) {
     init_hp(game_state, current_timestamp);
 }
 
-void init_state(struct GameState *game_state) {
+void init_state(struct ApplicationContext *context) {
+    struct GameState *game_state = context->game_state;
+
     // Try to load the state from the storage
     if (!load_state_from_file(&game_state->persistent)) {
         init_persistent_state_object(game_state);
@@ -41,7 +45,7 @@ void init_state(struct GameState *game_state) {
         // State loaded from file. Actualize it up to
         // the current timestamp.
         FURI_LOG_D(LOG_TAG, "Fast forwarding persisted state to current time");
-        fast_forward_state(game_state);
+        fast_forward_state(context);
     }
     game_state->next_animation_index = 0;
 }
@@ -57,34 +61,34 @@ void reset_state(struct GameState *game_state) {
     init_persistent_state_object(game_state);
 }
 
-static void _generate_new_random_event(uint32_t timestamp, struct GameState *game_state, struct GameEvents *game_events) {
-    if (game_state->persistent.stage == DEAD) {
+static void _generate_new_random_event(uint32_t timestamp, struct ApplicationContext *context, struct GameEvents *game_events) {
+    if (context->game_state->persistent.stage == DEAD) {
         FURI_LOG_D(LOG_TAG, "Received generate request, but stage is DEAD");
         // Can't do much
         return;
     }
     // Check every individual feature
-    check_xp(game_state, timestamp, game_events);
-    check_hu(game_state, timestamp, game_events);
-    check_hp(game_state, timestamp, game_events);
+    check_xp(context, timestamp, game_events);
+    check_hu(context, timestamp, game_events);
+    check_hp(context, timestamp, game_events);
 }
 
-void generate_new_random_events(struct GameState *game_state, struct GameEvents *game_events) {
+void generate_new_random_events(struct ApplicationContext *context, struct GameEvents *game_events) {
     uint32_t current_timestamp = get_current_timestamp();
-    _generate_new_random_event(current_timestamp, game_state, game_events);
+    _generate_new_random_event(current_timestamp, context, game_events);
     return;
 }
 
-bool process_events(struct GameState *game_state, struct GameEvents game_events) {
+bool process_events(struct ApplicationContext *context, struct GameEvents game_events) {
     bool new_events = false;
 
     // Process every individual feature
-    new_events |= apply_xp(game_state, game_events);
-    new_events |= apply_hu(game_state, game_events);
-    new_events |= apply_hp(game_state, game_events);
+    new_events |= apply_xp(context, game_events);
+    new_events |= apply_hu(context, game_events);
+    new_events |= apply_hp(context, game_events);
 
     if (new_events) {
-        correct_state(game_state);
+        correct_state(context->game_state);
     }
 
     return new_events;

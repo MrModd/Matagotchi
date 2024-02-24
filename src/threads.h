@@ -12,4 +12,7 @@ void main_thread(struct ApplicationContext *);
 /* Thread dedicated to the processing of game events */
 int32_t secondary_thread(void *);
 
+/* Thread dedicated to activate the vibration */
+int32_t vibration_thread(void *);
+
 #endif

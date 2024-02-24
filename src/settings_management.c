@@ -1,12 +1,14 @@
-#include <furi.h> // For FURI_LOG_D
+#include <furi.h> // For FURI_LOG_T
 
 #include <furi_hal.h>
 
 #include <notification/notification_messages.h>
 #include <notification/notification.h>
 
+#include "constants.h"
 #include "settings_management.h"
 #include "save_restore.h"
+#include "flipper_structs.h"
 #include "game_structs.h"
 
 #define VIBRATION_ENABLED(game_state) game_state->settings.vibration
@@ -34,7 +36,7 @@ void persist_settings(struct GameState *game_state) {
 
 // Vibration
 
-static void vibrate_ms(const struct GameState *game_state, uint32_t ms) {
+void vibrate_ms(const struct GameState *game_state, uint32_t ms) {
     if (VIBRATION_ENABLED(game_state)) {
         furi_hal_vibro_on(true);
         furi_delay_ms(ms);
@@ -42,12 +44,16 @@ static void vibrate_ms(const struct GameState *game_state, uint32_t ms) {
     }
 }
 
-void vibrate_short(const struct GameState *game_state) {
-    vibrate_ms(game_state, 100);
+void vibrate_short(const struct ApplicationContext *context) {
+    struct VibrationMessage vibration_message = {.type = VIBRATE_MS, .ms = 100U};
+    FURI_LOG_T(LOG_TAG, "vibrate_short(): Sending message to thread");
+    furi_message_queue_put(context->vibration_message_queue, &vibration_message, FuriWaitForever);
 }
 
-void vibrate_long(const struct GameState *game_state) {
-    vibrate_ms(game_state, 500);
+void vibrate_long(const struct ApplicationContext *context) {
+    struct VibrationMessage vibration_message = {.type = VIBRATE_MS, .ms = 500U};
+    FURI_LOG_T(LOG_TAG, "vibrate_long(): Sending message to thread");
+    furi_message_queue_put(context->vibration_message_queue, &vibration_message, FuriWaitForever);
 }
 
 // Sound

@@ -23,7 +23,7 @@ static void vibration_cb(VariableItem *item) {
     variable_item_set_current_value_text(item, off_on_options[index]);
     context->game_state->settings.vibration = index;
 
-    vibrate_short(context->game_state);
+    vibrate_short(context);
 }
 
 static void sound_cb(VariableItem *item) {

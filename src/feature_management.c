@@ -12,7 +12,8 @@ void init_xp(struct GameState *game_state, uint32_t current_timestamp) {
     game_state->persistent.last_recorded_xp_update = current_timestamp;
 }
 
-void check_xp(const struct GameState *game_state, uint32_t current_timestamp, struct GameEvents *game_events) {
+void check_xp(const struct ApplicationContext *context, uint32_t current_timestamp, struct GameEvents *game_events) {
+    struct GameState *game_state = context->game_state;
     uint32_t last_timestamp = game_state->persistent.last_recorded_xp_update;
     uint32_t nb_events = (current_timestamp - last_timestamp) / NEW_XP_FREQUENCY;
 
@@ -36,7 +37,8 @@ void check_xp(const struct GameState *game_state, uint32_t current_timestamp, st
     }
 }
 
-bool apply_xp(struct GameState *game_state, struct GameEvents game_events) {
+bool apply_xp(struct ApplicationContext *context, struct GameEvents game_events) {
+    struct GameState *game_state = context->game_state;
     bool state_updated = false;
 
     if (game_events.xp_timestamp == 0) {
@@ -61,7 +63,7 @@ bool apply_xp(struct GameState *game_state, struct GameEvents game_events) {
             game_state->persistent.stage++;
             FURI_LOG_I(LOG_TAG, "Evoluted to new stage %u!", game_state->persistent.stage);
             play_level_up(game_state);
-            vibrate_long(game_state);
+            vibrate_long(context);
         } else {
             game_state->persistent.xp += game_events.xp;
             game_events.xp = 0;
@@ -84,7 +86,8 @@ void init_hu(struct GameState *game_state, uint32_t current_timestamp) {
     game_state->persistent.last_recorded_hu_update = current_timestamp;
 }
 
-void check_hu(const struct GameState *game_state, uint32_t current_timestamp, struct GameEvents *game_events) {
+void check_hu(const struct ApplicationContext *context, uint32_t current_timestamp, struct GameEvents *game_events) {
+    struct GameState *game_state = context->game_state;
     uint32_t last_timestamp = game_state->persistent.last_recorded_hu_update;
     uint32_t nb_events = (current_timestamp - last_timestamp) / LOSE_HU_FREQUENCY;
 
@@ -108,7 +111,8 @@ void check_hu(const struct GameState *game_state, uint32_t current_timestamp, st
     }
 }
 
-bool apply_hu(struct GameState *game_state, struct GameEvents game_events) {
+bool apply_hu(struct ApplicationContext *context, struct GameEvents game_events) {
+    struct GameState *game_state = context->game_state;
     int32_t hu = game_events.hu;
 
     if (game_events.hu_timestamp == 0) {
@@ -127,7 +131,7 @@ bool apply_hu(struct GameState *game_state, struct GameEvents game_events) {
             game_state->persistent.hu = 0;
             FURI_LOG_I(LOG_TAG, "The pet is hungry!");
             play_starvation(game_state);
-            vibrate_long(game_state);
+            vibrate_long(context);
         }
     } else if (hu > 0) {
         // Ate some food
@@ -160,7 +164,8 @@ void init_hp(struct GameState *game_state, uint32_t current_timestamp) {
     game_state->persistent.last_recorded_hp_update = current_timestamp;
 }
 
-void check_hp(const struct GameState *game_state, uint32_t current_timestamp, struct GameEvents *game_events) {
+void check_hp(const struct ApplicationContext *context, uint32_t current_timestamp, struct GameEvents *game_events) {
+    struct GameState *game_state = context->game_state;
     uint32_t last_timestamp = game_state->persistent.last_recorded_hp_update;
     uint32_t nb_events = (current_timestamp - last_timestamp) / CHECK_HP_FREQUENCY;
 
@@ -181,7 +186,7 @@ void check_hp(const struct GameState *game_state, uint32_t current_timestamp, st
             } else {
                 FURI_LOG_I(LOG_TAG, "The pet is losing HP for an illness!");
                 play_ambulance(game_state);
-                vibrate_long(game_state);
+                vibrate_long(context);
             }
             game_events->hp -= random_uniform(LOSE_HP_MIN, LOSE_HP_MAX);
         }
@@ -192,7 +197,8 @@ void check_hp(const struct GameState *game_state, uint32_t current_timestamp, st
     }
 }
 
-bool apply_hp(struct GameState *game_state, struct GameEvents game_events) {
+bool apply_hp(struct ApplicationContext *context, struct GameEvents game_events) {
+    struct GameState *game_state = context->game_state;
     int32_t hp = game_events.hp;
 
     if (game_events.hp_timestamp == 0) {
