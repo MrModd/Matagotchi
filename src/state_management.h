@@ -1,10 +1,8 @@
 #ifndef __STATE_MANAGEMENT_H__
 #define __STATE_MANAGEMENT_H__
 
-#include <stdint.h>
-
-#include "flipper_structs.h"
 #include "game_structs.h"
+#include "flipper_structs.h"
 
 void init_state(struct ApplicationContext *);
 void persist_state(struct GameState *);
